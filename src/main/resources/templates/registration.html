@@ -12,6 +12,9 @@
     <label for="nickname">Enter Nickname: </label>
     <input type="text" th:field="*{nickname}" id="nickname">
     <br/>
+    <label for="birthDate">BirthDate:
+        <input id="birthDate" type="date" name="birthDate" th:value="*{birthDate}">
+    </label><br>
     <div th:each="role : ${roles}">
         <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
         <label th:for="${role}" th:text="${role}">Role name</label>

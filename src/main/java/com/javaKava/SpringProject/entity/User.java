@@ -3,6 +3,7 @@ package com.javaKava.SpringProject.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,7 @@ public class User {
     private long id;
     private String email;
     private String nickname;
+    private LocalDate birthDate;
     private String image;
     @Enumerated(EnumType.STRING)
     private Role role;

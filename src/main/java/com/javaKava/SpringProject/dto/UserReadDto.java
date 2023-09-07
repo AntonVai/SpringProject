@@ -5,7 +5,9 @@ import com.javaKava.SpringProject.entity.Role;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldNameConstants;
+
+
+import java.time.LocalDate;
 
 
 @Data
@@ -14,6 +16,7 @@ public class UserReadDto {
     private Long id;
     private String email;
     private String nickname;
+    private LocalDate birthDate;
     private String image;
     private Role role;
 
