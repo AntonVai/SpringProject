@@ -5,16 +5,24 @@
     <title>User</title>
 </head>
 <body>
-<p th:text="${user.get().nickname}">Name</p>
-<p th:text="${user.get.getId()}">Id</p>
-<p th:text="${user.get().role}">Role</p>
-
-
-<a th:href="@{/users/{id}/edit(id=${user.get().getId()})}">Edit</a>
-
+<form th:method="PATCH" th:action="@{/users/{id}(id=${user.get().getId()})}" th:object="${user}">
+<label for="email">Email:
+    <input id="email" type="text" name="email" th:value="${user.get().email}">
+</label><br>
+<label for="nickname">Nickname:
+    <input id="nickname" type="text" name="nickname" th:value="${user.get().nickname}">
+</label><br>
+<div th:each="role : ${roles}">
+    <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.get().role}">
+    <label th:for="${role}" th:text="${role}">Role name</label>
+</div>
+    <button type="submit">Update</button>
+</form>
 <form th:action="@{/users/{id}(id=${user.get().id})}" th:if="${user.get().getRole().name() == 'OWNER'}" th:method="DELETE">
     <button type="submit">Delete</button>
 </form>
-
+<div th:if="${errors}">
+    <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+</div>
 </body>
 </html>

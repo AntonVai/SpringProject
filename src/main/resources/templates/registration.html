@@ -19,6 +19,9 @@
 <input type="submit" th:value="create">
 </form>
 
+<div th:if="${errors}">
+    <p  style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error</p>
+</div>
 
 
 </body>

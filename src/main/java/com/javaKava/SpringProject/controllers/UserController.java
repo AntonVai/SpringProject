@@ -7,8 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -28,6 +31,7 @@ public class UserController {
         return userService.findById(id)
                 .map(user -> {
                     model.addAttribute("user", userService.findById(id));
+                    model.addAttribute("roles",Role.values());
                     return "user";
                 })
 
@@ -42,22 +46,31 @@ public class UserController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("createUser") UserCreateEditDto userCreateEditDto) {
+    public String create(@ModelAttribute("createUser")
+                         @Validated UserCreateEditDto userCreateEditDto,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+            return "redirect:/registration";
+        }
+
         userService.create(userCreateEditDto);
         return "redirect:/users";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findById(id));
-        model.addAttribute("roles", Role.values());
-        return "edit";
-
 
     }
+
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") UserCreateEditDto userCreateEditDto, @PathVariable("id") Long id) {
+    public String update(@ModelAttribute("user") @Validated UserCreateEditDto userCreateEditDto,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes,
+                         @PathVariable("id") Long id) {
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+            return "redirect:/users/{id}";
+        }
+
         return userService.update(id, userCreateEditDto)
                 .map(it -> "redirect:/users/{id}")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
