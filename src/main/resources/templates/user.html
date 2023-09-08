@@ -19,6 +19,17 @@
     <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.get().role}">
     <label th:for="${role}" th:text="${role}">Role name</label>
 </div>
+    <div>
+        <label for="chat">Chat:
+            <select id="chat" name="chatId">
+                <option th:each="chat : ${chats}"
+                        th:value="${chat.id}"
+                        th:selected="${chat.id == user.get().id}"
+                        th:text="${chat.name}">Chat
+                </option>
+            </select>
+        </label>
+    </div>
     <button type="submit">Update</button>
 </form>
 <form th:action="@{/users/{id}(id=${user.get().id})}" th:if="${user.get().getRole().name() == 'OWNER'}" th:method="DELETE">

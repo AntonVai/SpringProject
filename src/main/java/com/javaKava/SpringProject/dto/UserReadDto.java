@@ -19,5 +19,6 @@ public class UserReadDto {
     private LocalDate birthDate;
     private String image;
     private Role role;
+    private ChatReadDto chat;
 
 }

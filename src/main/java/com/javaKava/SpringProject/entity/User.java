@@ -30,6 +30,9 @@ public class User {
     private String image;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
     @CreatedDate
     private Instant createdAt;
     @LastModifiedDate

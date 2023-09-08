@@ -26,6 +26,7 @@ public class UserCreateEditDto {
     private String nickname;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+    private Integer chatId;
 
     private Role role;
 
