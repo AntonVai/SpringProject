@@ -4,6 +4,8 @@ import com.javaKava.SpringProject.dto.UserCreateEditDto;
 import com.javaKava.SpringProject.entity.Role;
 import com.javaKava.SpringProject.service.ChatService;
 import com.javaKava.SpringProject.service.UserService;
+
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ public class UserController {
     private final UserService userService;
     private final ChatService chatService;
 
+
+
     @GetMapping
     public String findAll(Model model) {
         model.addAttribute("users", userService.findAll());
@@ -37,7 +41,6 @@ public class UserController {
                     model.addAttribute("chats",chatService.findAll());
                     return "user";
                 })
-
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -56,9 +59,8 @@ public class UserController {
                          RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
-            return "redirect:/registration";
+            return "redirect:/users/registration";
         }
-
         userService.create(userCreateEditDto);
         return "redirect:/users";
 

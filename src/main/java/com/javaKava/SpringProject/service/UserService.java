@@ -2,6 +2,7 @@ package com.javaKava.SpringProject.service;
 
 import com.javaKava.SpringProject.dto.UserCreateEditDto;
 import com.javaKava.SpringProject.dto.UserReadDto;
+import com.javaKava.SpringProject.entity.User;
 import com.javaKava.SpringProject.mapper.UserCreateEditMapper;
 import com.javaKava.SpringProject.mapper.UserReadMapper;
 import com.javaKava.SpringProject.repository.UserRepository;
@@ -35,6 +36,11 @@ public class UserService {
                 .map(userReadMapper::UserMapToUserReadDto)
                 .collect(Collectors.toList());
     }
+    public Optional<User> findByEmail(String email){
+      return   userRepository.findByEmail(email);
+    }
+
+
 
     @Transactional
     public UserReadDto create(UserCreateEditDto userCreateEditDto) {
