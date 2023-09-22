@@ -4,6 +4,7 @@ import com.javaKava.SpringProject.entity.Role;
 
 
 import com.javaKava.SpringProject.util.UniqueEmail;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,8 +19,8 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldNameConstants
-
 public class UserCreateEditDto {
 
     @Email

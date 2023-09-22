@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UserValid.class)
+@Constraint(validatedBy = EmailValid.class)
 public @interface UniqueEmail {
     String message() default "{this email is already in use}";
 

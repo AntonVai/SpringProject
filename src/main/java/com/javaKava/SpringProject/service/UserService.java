@@ -7,7 +7,6 @@ import com.javaKava.SpringProject.mapper.UserCreateEditMapper;
 import com.javaKava.SpringProject.mapper.UserReadMapper;
 import com.javaKava.SpringProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
