@@ -2,6 +2,8 @@ package com.javaKava.SpringProject.controllers;
 
 import com.javaKava.SpringProject.dto.UserCreateEditDto;
 import com.javaKava.SpringProject.entity.Role;
+import com.javaKava.SpringProject.mapper.UserCreateEditMapper;
+import com.javaKava.SpringProject.mapper.UserReadMapper;
 import com.javaKava.SpringProject.service.ChatService;
 import com.javaKava.SpringProject.service.UserService;
 
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
     private final UserService userService;
     private final ChatService chatService;
+
 
 
 
@@ -68,10 +71,9 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Validated UserCreateEditDto userCreateEditDto,
+    public String update( @PathVariable("id") Long id,@ModelAttribute("user") @Validated UserCreateEditDto userCreateEditDto,
                          BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes,
-                         @PathVariable("id") Long id) {
+                         RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
             return "redirect:/users/{id}";

@@ -6,33 +6,26 @@ import com.javaKava.SpringProject.dto.UserReadDto;
 import com.javaKava.SpringProject.entity.Role;
 
 import com.javaKava.SpringProject.integration.IntegrationTestBase;
-
+import com.javaKava.SpringProject.service.ChatService;
 import com.javaKava.SpringProject.service.UserService;
 import lombok.RequiredArgsConstructor;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
-
-
-import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static com.javaKava.SpringProject.dto.UserCreateEditDto.Fields.*;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.testcontainers.shaded.org.hamcrest.Matchers.hasSize;
 
 
 @RequiredArgsConstructor
@@ -42,42 +35,24 @@ class UserControllerTest extends IntegrationTestBase {
     private final MockMvc mockMvc;
 
 
-    @MockBean
     private final UserService userService;
+
 
     @Test
     void findAll() throws Exception {
-        UserReadDto user1 = UserReadDto.builder()
-                .id(1L)
-                .email("test1@gmail.com")
-                .nickname("test1")
-                .build();
-        UserReadDto user2 = UserReadDto.builder()
-                .id(2L)
-                .email("test@gmail.com")
-                .nickname("test2")
-                .build();
-
-        Mockito.when(userService.findAll()).thenReturn(Arrays.asList(user1, user2));
-
         mockMvc.perform(get("/users"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("users"))
                 .andExpect(model().attributeExists("users"))
+                .andExpect(model().attribute("users", userService.findAll()))
                 .andDo(print());
     }
 
     @Test
     void findById() throws Exception {
-        UserReadDto user1 = UserReadDto.builder()
-                .id(1L)
-                .email("test1@gmail.com")
-                .nickname("test1")
-                .role(Role.OWNER)
-                .build();
-        Mockito.when(userService.findById(Mockito.any())).thenReturn(Optional.of(user1));
-
-        mockMvc.perform(get("/users/{id}", user1.getId()))
+        Optional<UserReadDto> user1 = Optional.of(userService.findById(1L).orElse(new UserReadDto()));
+        mockMvc.perform(get("/users/{id}", user1.get().getId()))
+                .andExpect(model().attribute("user", user1))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("user"))
                 .andExpect(model().attributeExists("user"))
@@ -121,33 +96,25 @@ class UserControllerTest extends IntegrationTestBase {
 
     @Test
     void update() throws Exception {
-        Long id = 1L;
-        Optional<UserReadDto> userReadDto = userService.findById(id);
-        UserCreateEditDto userDto = new UserCreateEditDto(
-                "test@gmail.com",
-                "test",
-                LocalDate.now(),
-                2,
-                Role.ALESHA
-        );
-        when(userService.update(id, userDto)).thenReturn(userReadDto);
-        mockMvc.perform(patch("/users/{id}", id))
+        UserCreateEditDto userDto = UserCreateEditDto.builder()
+                .email("test@gmail.com")
+                .nickname("test")
+                .role(Role.MEMBER)
+                .birthDate(LocalDate.now())
+                .build();
+        userService.update(1L, userDto);
+        mockMvc.perform(patch("/users/{id}", 1L))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
     }
 
     @Test
     void delete() throws Exception {
-        UserReadDto user1 = UserReadDto.builder()
-                .id(1L)
-                .email("test1@gmail.com")
-                .nickname("test1")
-                .role(Role.OWNER)
-                .build();
-        when(userService.delete(user1.getId())).thenReturn(true);
-        mockMvc.perform(patch("/users/{id}", user1.getId()))
+        mockMvc.perform(patch("/users/{id}", 1L))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
+        userService.delete(1L);
+        assertEquals(4,userService.findAll().size());
 
     }
 }
