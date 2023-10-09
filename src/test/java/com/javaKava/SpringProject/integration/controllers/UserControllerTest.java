@@ -37,6 +37,20 @@ class UserControllerTest extends IntegrationTestBase {
 
     private final UserService userService;
 
+    @Test
+    void create() throws Exception {
+        mockMvc.perform(post("/users")
+                        .param(email, "test@gmail.com")
+                        .param(nickname, "test")
+                        .param(role, Role.MEMBER.name())
+                        .param(birthDate, "1995-02-10")
+                        .param(chatId, "2")
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/users"))
+                .andDo(print());
+    }
+
 
     @Test
     void findAll() throws Exception {
@@ -80,19 +94,6 @@ class UserControllerTest extends IntegrationTestBase {
                 .andDo(print());
     }
 
-    @Test
-    void create() throws Exception {
-        mockMvc.perform(post("/users")
-                        .param(email, "test@gmail.com")
-                        .param(nickname, "test")
-                        .param(role, Role.MEMBER.name())
-                        .param(birthDate, "1995-02-10")
-                        .param(chatId, "2")
-                )
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users"))
-                .andDo(print());
-    }
 
     @Test
     void update() throws Exception {

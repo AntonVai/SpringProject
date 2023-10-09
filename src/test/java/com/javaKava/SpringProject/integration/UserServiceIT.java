@@ -23,19 +23,6 @@ public class UserServiceIT extends IntegrationTestBase {
     private final UserService userService;
 
     @Test
-    void findAll() {
-        List<UserReadDto> result = userService.findAll();
-        assertThat(result).hasSize(5);
-    }
-
-    @Test
-    void findById() {
-        Optional<UserReadDto> user = userService.findById(1L);
-        assertTrue(user.isPresent());
-        user.ifPresent(userReadDto -> assertEquals("Orau@gmail.com", userReadDto.getEmail()));
-    }
-
-    @Test
     void create() {
         UserCreateEditDto userDto = new UserCreateEditDto(
                 "test@gmail.com",
@@ -51,6 +38,21 @@ public class UserServiceIT extends IntegrationTestBase {
         assertEquals(userDto.getChatId(), result.getChat().getId());
         assertEquals(userDto.getRole(), result.getRole());
     }
+
+    @Test
+    void findAll() {
+        List<UserReadDto> result = userService.findAll();
+        assertThat(result).hasSize(5);
+    }
+
+    @Test
+    void findById() {
+        Optional<UserReadDto> user = userService.findById(1L);
+        assertTrue(user.isPresent());
+        user.ifPresent(userReadDto -> assertEquals("Orau@gmail.com", userReadDto.getEmail()));
+    }
+
+
 
     @Test
     void findByEmail() {
