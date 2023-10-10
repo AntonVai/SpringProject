@@ -16,7 +16,6 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public class UserCreateEditMapper {
     private final ChatRepository chatRepository;
-    private final ModelMapper mapper;
 
     public User userCreateEditDtoMapToUser(UserCreateEditDto userCreateEditDto, User user) {
         copy(userCreateEditDto, user);
@@ -25,7 +24,9 @@ public class UserCreateEditMapper {
     }
 
     public User UserCreateEditDtoMapToUser(UserCreateEditDto userCreateEditDto) {
-        return mapper.map(userCreateEditDto, User.class);
+        User user = new User();
+        copy(userCreateEditDto,user);
+        return user;
 
     }
 
