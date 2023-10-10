@@ -9,6 +9,7 @@ import com.javaKava.SpringProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final UserCreateEditMapper userCreateEditMapper;
+    private final ImageService imageService;
 
 
     public Optional<UserReadDto> findById(Long id) {
@@ -35,16 +37,26 @@ public class UserService {
                 .map(userReadMapper::UserMapToUserReadDto)
                 .collect(Collectors.toList());
     }
-    public Optional<User> findByEmail(String email){
-      return   userRepository.findByEmail(email);
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
+    public Optional<byte[]> findAvatar(Long id){
+        return userRepository.findById(id)
+                .map(User::getImage)
+                .filter(StringUtils::hasText)
+                .flatMap(imageService::getImage);
+    }
 
 
     @Transactional
     public UserReadDto create(UserCreateEditDto userCreateEditDto) {
         return Optional.of(userCreateEditDto)
-                .map(userCreateEditMapper::UserCreateEditDtoMapToUser)
+                .map(dto -> {
+                    imageService.upload(dto.getImage());
+                    return userCreateEditMapper.UserCreateEditDtoMapToUser(dto);
+                })
                 .map(userRepository::save)
                 .map(userReadMapper::UserMapToUserReadDto)
                 .orElseThrow();
@@ -53,7 +65,10 @@ public class UserService {
     @Transactional
     public Optional<UserReadDto> update(Long id, UserCreateEditDto dto) {
         return userRepository.findById(id)
-                .map(entity -> userCreateEditMapper.userCreateEditDtoMapToUser(dto, entity))
+                .map(entity -> {
+                    imageService.upload(dto.getImage());
+                    return userCreateEditMapper.userCreateEditDtoMapToUser(dto, entity);
+                })
                 .map(userRepository::saveAndFlush)
                 .map(userReadMapper::UserMapToUserReadDto);
     }

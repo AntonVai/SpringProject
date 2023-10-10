@@ -27,8 +27,6 @@ public class UserController {
     private final ChatService chatService;
 
 
-
-
     @GetMapping
     public String findAll(Model model) {
         model.addAttribute("users", userService.findAll());
@@ -40,8 +38,8 @@ public class UserController {
         return userService.findById(id)
                 .map(user -> {
                     model.addAttribute("user", userService.findById(id));
-                    model.addAttribute("roles",Role.values());
-                    model.addAttribute("chats",chatService.findAll());
+                    model.addAttribute("roles", Role.values());
+                    model.addAttribute("chats", chatService.findAll());
                     return "user";
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -51,7 +49,7 @@ public class UserController {
     public String registration(Model model, @ModelAttribute("user") UserCreateEditDto user) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
-        model.addAttribute("chats",chatService.findAll());
+        model.addAttribute("chats", chatService.findAll());
         return "registration";
     }
 
@@ -60,8 +58,8 @@ public class UserController {
                          @Validated UserCreateEditDto userCreateEditDto,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/users/registration";
         }
         userService.create(userCreateEditDto);
@@ -71,11 +69,11 @@ public class UserController {
 
 
     @PatchMapping("/{id}")
-    public String update( @PathVariable("id") Long id,@ModelAttribute("user") @Validated UserCreateEditDto userCreateEditDto,
+    public String update(@PathVariable("id") Long id, @ModelAttribute("user") @Validated UserCreateEditDto userCreateEditDto,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/users/{id}";
         }
 

@@ -7,8 +7,10 @@ import com.javaKava.SpringProject.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class UserCreateEditMapper {
         user.setRole(userCreateEditDto.getRole());
         user.setBirthDate(userCreateEditDto.getBirthDate());
         user.setChat(getChat(userCreateEditDto.getChatId()));
+
+        Optional.ofNullable(userCreateEditDto.getImage())
+                .filter(Predicate.not(MultipartFile::isEmpty))
+                .ifPresent(image -> user.setImage(image.getOriginalFilename()));
 
     }
     public Chat getChat(Integer id){

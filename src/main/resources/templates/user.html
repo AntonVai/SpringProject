@@ -5,7 +5,7 @@
     <title>User</title>
 </head>
 <body>
-<form th:method="PATCH" th:action="@{/users/{id}(id=${user.get().getId()})}" th:object="${user}">
+<form th:method="PATCH" enctype="multipart/form-data" th:action="@{/users/{id}(id=${user.get().getId()})}" th:object="${user}">
 <label for="email">Email:
     <input id="email" type="text" name="email" th:value="${user.get().email}">
 </label><br>
@@ -15,6 +15,12 @@
     <label for="birthDate">BirthDate:
         <input id="birthDate" type="date" name="birthDate" th:value="${user.get().birthDate}">
     </label><br>
+    <div>
+        <img th:src="@{/api/v1/users/{userId}/avatar(userId=${user.get().getId()})}" alt="User image">
+    </div>
+    <label for="image">Image:
+           <input id="image" type="file" name="image">
+        </label><br>
 <div th:each="role : ${roles}">
     <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.get().role}">
     <label th:for="${role}" th:text="${role}">Role name</label>
