@@ -11,8 +11,12 @@ import com.javaKava.SpringProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -42,13 +46,17 @@ class UserControllerTest extends IntegrationTestBase {
         mockMvc.perform(post("/users")
                         .param(email, "test@gmail.com")
                         .param(nickname, "test")
-                        .param(role, Role.MEMBER.name())
-                        .param(birthDate, "1995-02-10")
-                        .param(chatId, "2")
+                        .param(role, "OWNER")
+                        .param(chatId,"1")
+                        .param(birthDate, "2000-01-01")
+                        .param(image,"java.jpg")
                 )
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users"))
-                .andDo(print());
+                .andExpectAll(
+                        status().is3xxRedirection(),
+                        redirectedUrlPattern("/users/{\\d+}")
+                );
+
+
     }
 
 
@@ -102,6 +110,7 @@ class UserControllerTest extends IntegrationTestBase {
                 .nickname("test")
                 .role(Role.MEMBER)
                 .birthDate(LocalDate.now())
+                .image(new MockMultipartFile("test",new byte[0]))
                 .build();
         userService.update(1L, userDto);
         mockMvc.perform(patch("/users/{id}", 1L))

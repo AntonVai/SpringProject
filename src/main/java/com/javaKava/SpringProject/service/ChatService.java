@@ -1,7 +1,7 @@
 package com.javaKava.SpringProject.service;
 
 import com.javaKava.SpringProject.dto.ChatReadDto;
-import com.javaKava.SpringProject.mapper.ChatReadMapper;
+import com.javaKava.SpringProject.mapper.ChatReadMap;
 import com.javaKava.SpringProject.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,17 +15,16 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ChatService {
     private final ChatRepository chatRepository;
-    private final ChatReadMapper chatReadMapper;
 
 
     public Optional<ChatReadDto> findById(Integer id) {
         return chatRepository.findById(id)
-                .map(chatReadMapper::chatMapToReadDto);
+                .map(ChatReadMap.INSTANCE::chatToReadDto);
     }
 
-    public List<ChatReadDto> findAll(){
+    public List<ChatReadDto> findAll() {
         return chatRepository.findAll().stream()
-                .map(chatReadMapper::chatMapToReadDto)
+                .map(ChatReadMap.INSTANCE::chatToReadDto)
                 .toList();
     }
 }

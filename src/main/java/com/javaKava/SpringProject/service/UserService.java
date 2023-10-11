@@ -3,8 +3,10 @@ package com.javaKava.SpringProject.service;
 import com.javaKava.SpringProject.dto.UserCreateEditDto;
 import com.javaKava.SpringProject.dto.UserReadDto;
 import com.javaKava.SpringProject.entity.User;
-import com.javaKava.SpringProject.mapper.UserCreateEditMapper;
-import com.javaKava.SpringProject.mapper.UserReadMapper;
+
+import com.javaKava.SpringProject.mapper.UserCreateEditMap;
+import com.javaKava.SpringProject.mapper.UserReadMap;
+
 import com.javaKava.SpringProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,21 +22,20 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
-    private final UserReadMapper userReadMapper;
-    private final UserCreateEditMapper userCreateEditMapper;
+
     private final ImageService imageService;
 
 
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
-                .map(userReadMapper::UserMapToUserReadDto);
+                .map(UserReadMap.INSTANCE::userToDto);
 
     }
 
 
     public List<UserReadDto> findAll() {
         return userRepository.findAll().stream()
-                .map(userReadMapper::UserMapToUserReadDto)
+                .map(UserReadMap.INSTANCE::userToDto)
                 .collect(Collectors.toList());
     }
 
@@ -55,10 +56,10 @@ public class UserService {
         return Optional.of(userCreateEditDto)
                 .map(dto -> {
                     imageService.upload(dto.getImage());
-                    return userCreateEditMapper.UserCreateEditDtoMapToUser(dto);
+                    return UserCreateEditMap.INSTANCE.userCreateEditDtoToUser(dto);
                 })
                 .map(userRepository::save)
-                .map(userReadMapper::UserMapToUserReadDto)
+                .map(UserReadMap.INSTANCE::userToDto)
                 .orElseThrow();
     }
 
@@ -67,10 +68,11 @@ public class UserService {
         return userRepository.findById(id)
                 .map(entity -> {
                     imageService.upload(dto.getImage());
-                    return userCreateEditMapper.userCreateEditDtoMapToUser(dto, entity);
+                    return UserCreateEditMap.INSTANCE.userCreateEditDtoToUser(dto,entity);
                 })
                 .map(userRepository::saveAndFlush)
-                .map(userReadMapper::UserMapToUserReadDto);
+                .map(UserReadMap.INSTANCE::userToDto);
+
     }
 
     @Transactional
