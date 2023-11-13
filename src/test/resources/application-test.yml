@@ -5,3 +5,4 @@ spring:
   jpa:
     properties:
         hbm2ddl.auto: validate
+        

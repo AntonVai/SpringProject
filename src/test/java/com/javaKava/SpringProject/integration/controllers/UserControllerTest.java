@@ -6,7 +6,6 @@ import com.javaKava.SpringProject.dto.UserReadDto;
 import com.javaKava.SpringProject.entity.Role;
 
 import com.javaKava.SpringProject.integration.IntegrationTestBase;
-import com.javaKava.SpringProject.service.ChatService;
 import com.javaKava.SpringProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -14,22 +13,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.time.LocalDate;
-import java.util.List;
+
 import java.util.Optional;
 
 import static com.javaKava.SpringProject.dto.UserCreateEditDto.Fields.*;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.testcontainers.shaded.org.hamcrest.Matchers.hasSize;
 
 
 @RequiredArgsConstructor
@@ -47,9 +42,9 @@ class UserControllerTest extends IntegrationTestBase {
                         .param(email, "test@gmail.com")
                         .param(nickname, "test")
                         .param(role, "OWNER")
-                        .param(chatId,"1")
+                        .param(chatId, "1")
                         .param(birthDate, "2000-01-01")
-                        .param(image,"java.jpg")
+                        .param(image, "java.jpg")
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
@@ -110,7 +105,7 @@ class UserControllerTest extends IntegrationTestBase {
                 .nickname("test")
                 .role(Role.MEMBER)
                 .birthDate(LocalDate.now())
-                .image(new MockMultipartFile("test",new byte[0]))
+                .image(new MockMultipartFile("test", new byte[0]))
                 .build();
         userService.update(1L, userDto);
         mockMvc.perform(patch("/users/{id}", 1L))
@@ -124,7 +119,7 @@ class UserControllerTest extends IntegrationTestBase {
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
         userService.delete(1L);
-        assertEquals(4,userService.findAll().size());
+        assertEquals(4, userService.findAll().size());
 
     }
 }

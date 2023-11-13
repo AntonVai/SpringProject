@@ -5,20 +5,12 @@ import com.javaKava.SpringProject.dto.UserCreateEditDto;
 import com.javaKava.SpringProject.dto.UserReadDto;
 import com.javaKava.SpringProject.entity.Role;
 import com.javaKava.SpringProject.entity.User;
-import com.javaKava.SpringProject.service.ImageService;
 import com.javaKava.SpringProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-import org.testcontainers.shaded.com.google.common.net.MediaType;
-
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor
 public class UserServiceIT extends IntegrationTestBase {
     private final UserService userService;
-    private final ImageService imageService;
 
     @SneakyThrows
     @Test
