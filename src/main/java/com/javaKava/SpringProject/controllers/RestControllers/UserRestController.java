@@ -6,7 +6,7 @@ import com.javaKava.SpringProject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,12 +30,13 @@ public class UserRestController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UserReadDto create(@RequestBody UserCreateEditDto userCreateEditDto) {
+    public UserReadDto create(@Validated @RequestBody UserCreateEditDto userCreateEditDto) {
         return userService.create(userCreateEditDto);
     }
 
     @PutMapping("/{id}")
-    public UserReadDto update(@PathVariable("id") Long id, UserCreateEditDto userCreateEditDto) {
+    public UserReadDto update(@PathVariable("id") Long id,
+                              @Validated UserCreateEditDto userCreateEditDto) {
         return userService.update(id, userCreateEditDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
