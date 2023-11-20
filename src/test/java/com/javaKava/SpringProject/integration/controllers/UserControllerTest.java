@@ -44,7 +44,6 @@ class UserControllerTest extends IntegrationTestBase {
                         .param(role, "OWNER")
                         .param(chatId, "1")
                         .param(birthDate, "2000-01-01")
-                        .param(image, "java.jpg")
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),
@@ -105,7 +104,6 @@ class UserControllerTest extends IntegrationTestBase {
                 .nickname("test")
                 .role(Role.MEMBER)
                 .birthDate(LocalDate.now())
-                .image(new MockMultipartFile("test", new byte[0]))
                 .build();
         userService.update(1L, userDto);
         mockMvc.perform(patch("/users/{id}", 1L))

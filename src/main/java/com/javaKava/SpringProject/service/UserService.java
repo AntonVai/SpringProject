@@ -11,7 +11,6 @@ import com.javaKava.SpringProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 
-    private final ImageService imageService;
+
 
 
     public Optional<UserReadDto> findById(Long id) {
@@ -43,21 +42,13 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<byte[]> findAvatar(Long id){
-        return userRepository.findById(id)
-                .map(User::getImage)
-                .filter(StringUtils::hasText)
-                .flatMap(imageService::getImage);
-    }
+
 
 
     @Transactional
     public UserReadDto create(UserCreateEditDto userCreateEditDto) {
         return Optional.of(userCreateEditDto)
-                .map(dto -> {
-                    imageService.upload(dto.getImage());
-                    return UserCreateEditMap.INSTANCE.userCreateEditDtoToUser(dto);
-                })
+                .map(UserCreateEditMap.INSTANCE::userCreateEditDtoToUser)
                 .map(userRepository::save)
                 .map(UserReadMap.INSTANCE::userToDto)
                 .orElseThrow();
@@ -66,10 +57,7 @@ public class UserService {
     @Transactional
     public Optional<UserReadDto> update(Long id, UserCreateEditDto dto) {
         return userRepository.findById(id)
-                .map(entity -> {
-                    imageService.upload(dto.getImage());
-                    return UserCreateEditMap.INSTANCE.userCreateEditDtoToUser(dto,entity);
-                })
+                .map(entity -> UserCreateEditMap.INSTANCE.userCreateEditDtoToUser(dto,entity))
                 .map(userRepository::saveAndFlush)
                 .map(UserReadMap.INSTANCE::userToDto);
 

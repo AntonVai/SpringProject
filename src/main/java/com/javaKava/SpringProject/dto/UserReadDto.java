@@ -21,8 +21,8 @@ public class UserReadDto {
     private String email;
     private String nickname;
     private LocalDate birthDate;
-    private String image;
     private Role role;
     private ChatReadDto chat;
+
 
 }

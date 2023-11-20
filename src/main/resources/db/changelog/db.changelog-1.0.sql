@@ -6,7 +6,6 @@ create table if not exists users
     id bigserial primary key,
     email varchar not null unique,
     nickname varchar(64),
-    image varchar,
     role varchar(32),
     created_at  timestamp,
     modified_at timestamp,

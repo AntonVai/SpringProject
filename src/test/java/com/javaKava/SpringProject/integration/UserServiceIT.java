@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.MockMultipartFile;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +29,7 @@ public class UserServiceIT extends IntegrationTestBase {
                 "test",
                 LocalDate.now(),
                 2,
-                Role.ALESHA,
-                new MockMultipartFile("test",new byte[0])
+                Role.ALESHA
         );
         UserReadDto actualResult = userService.create(userDto);
         assertEquals(userDto.getEmail(), actualResult.getEmail());
@@ -70,8 +68,7 @@ public class UserServiceIT extends IntegrationTestBase {
                 "test",
                 LocalDate.now(),
                 2,
-                Role.ALESHA,
-                new MockMultipartFile("test", new byte[0])
+                Role.ALESHA
 
         );
         Optional<UserReadDto> result = userService.update(1L, userDto);

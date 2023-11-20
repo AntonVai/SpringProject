@@ -27,7 +27,6 @@ public class User {
     private String email;
     private String nickname;
     private LocalDate birthDate;
-    private String image;
     @Enumerated(EnumType.STRING)
     private Role role;
     @ManyToOne(fetch = FetchType.LAZY)
