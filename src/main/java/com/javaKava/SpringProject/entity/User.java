@@ -25,6 +25,7 @@ public class User {
     private long id;
     @Column(unique = true, nullable = false)
     private String email;
+    private String password;
     private String nickname;
     private LocalDate birthDate;
     @Enumerated(EnumType.STRING)
