@@ -4,11 +4,10 @@ import com.javaKava.SpringProject.entity.Role;
 
 
 import com.javaKava.SpringProject.util.UniqueEmail;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.javaKava.SpringProject.util.group.CreateAction;
+import lombok.*;
 
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,6 +27,8 @@ public class UserCreateEditDto {
     @Email
     @UniqueEmail(message = "this email is already in use")
     private String email;
+    @NotBlank(groups = CreateAction.class)
+    private String password;
     @NotBlank
     @Size(min = 3, max = 64)
     private String nickname;

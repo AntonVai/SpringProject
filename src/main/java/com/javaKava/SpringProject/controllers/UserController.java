@@ -61,7 +61,7 @@ public class UserController {
             return "redirect:/users/registration";
         }
         userService.create(userCreateEditDto);
-        return "redirect:/users";
+        return "redirect:/login";
 
     }
 
