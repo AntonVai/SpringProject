@@ -4,7 +4,7 @@ import com.javaKava.SpringProject.dto.UserCreateEditDto;
 import com.javaKava.SpringProject.dto.UserReadDto;
 import com.javaKava.SpringProject.entity.User;
 
-import com.javaKava.SpringProject.mapper.UserCreateEditMapImpl;
+import com.javaKava.SpringProject.mapper.UserCreateEditMap;
 import com.javaKava.SpringProject.mapper.UserReadMap;
 
 import com.javaKava.SpringProject.repository.UserRepository;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final UserCreateEditMapImpl userCreateEditMap;
+    private final UserCreateEditMap userCreateEditMap;
 
 
 
