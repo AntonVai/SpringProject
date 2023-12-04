@@ -16,4 +16,5 @@ public class PasswordEncoderMapper {
     public String encode(String value) {
         return passwordEncoder.encode(value);
     }
+
 }
