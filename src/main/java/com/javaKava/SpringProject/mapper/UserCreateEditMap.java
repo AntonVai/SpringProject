@@ -15,7 +15,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring",uses = PasswordEncoderMapper.class)
 public interface UserCreateEditMap {
 
-    UserCreateEditMap INSTANCE = Mappers.getMapper(UserCreateEditMap.class);
+
 
 
     @Mapping(source = "email", target = "email")

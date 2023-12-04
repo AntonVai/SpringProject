@@ -4,7 +4,7 @@ import com.javaKava.SpringProject.dto.UserCreateEditDto;
 import com.javaKava.SpringProject.dto.UserReadDto;
 import com.javaKava.SpringProject.entity.User;
 
-import com.javaKava.SpringProject.mapper.UserCreateEditMap;
+import com.javaKava.SpringProject.mapper.UserCreateEditMapImpl;
 import com.javaKava.SpringProject.mapper.UserReadMap;
 
 import com.javaKava.SpringProject.repository.UserRepository;
@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final UserCreateEditMapImpl userCreateEditMap;
 
 
 
@@ -53,7 +54,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserReadDto create(UserCreateEditDto userCreateEditDto) {
         return Optional.of(userCreateEditDto)
-                .map(UserCreateEditMap.INSTANCE::userCreateEditDtoToUser)
+                .map(userCreateEditMap::userCreateEditDtoToUser)
                 .map(userRepository::save)
                 .map(UserReadMap.INSTANCE::userToDto)
                 .orElseThrow();
@@ -62,7 +63,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public Optional<UserReadDto> update(Long id, UserCreateEditDto dto) {
         return userRepository.findById(id)
-                .map(entity -> UserCreateEditMap.INSTANCE.userCreateEditDtoToUser(dto,entity))
+                .map(entity -> userCreateEditMap.userCreateEditDtoToUser(dto,entity))
                 .map(userRepository::saveAndFlush)
                 .map(UserReadMap.INSTANCE::userToDto);
 

@@ -27,6 +27,7 @@ public class UserServiceIT extends IntegrationTestBase {
         UserCreateEditDto userDto = new UserCreateEditDto(
                 "test@gmail.com",
                 "test",
+                "QWEQWEQW",
                 LocalDate.now(),
                 2,
                 Role.ALESHA
@@ -66,6 +67,7 @@ public class UserServiceIT extends IntegrationTestBase {
         UserCreateEditDto userDto = new UserCreateEditDto(
                 "test@gmail.com",
                 "test",
+                "qweqweqw",
                 LocalDate.now(),
                 2,
                 Role.ALESHA
